@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require("http");
 var router = express.Router();
+var generalFunctions = require('../general');
 
 /* GET home page. */
 router.get('/contactlist', (req, res, next) => {
@@ -27,13 +28,12 @@ router.get('/contactlist', (req, res, next) => {
  */
 router.get('/sendsms', (reqS, res, next) => {
     let mobile_number = reqS.query.mobile || null;
-    let message = reqS.query.message || null;
-    console.log("IN", mobile_number);
+    let message = reqS.query.message != undefined ? `Hi.  Your  OTP  is: ${generalFunctions.getRandomNumber()}, ${reqS.query.message}` : null;
     var options = {
         "method": "GET",
         "hostname": "api.msg91.com",
         "port": null,
-        "path": `/api/sendhttp.php?country=91&sender=MSGIND&route=4&mobiles=${mobile_number}&authkey=240694Arm4ogTjGfg5bb382b2&message=Hello&response=json`,
+        "path": encodeURI(`/api/sendhttp.php?country=91&sender=MSGIND&route=4&mobiles=${mobile_number}&authkey=240694Arm4ogTjGfg5bb382b2&message=${message}&response=json&unicode=1`),
         "headers": {}
     };
 
