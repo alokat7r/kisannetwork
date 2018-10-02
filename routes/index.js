@@ -8,7 +8,7 @@ const KisanNetworkModel = require('../models/message-log');
 router.get('/contactslist', (req, res, next) => {
     let resBody = [{
         id: 1,
-        first_name: "Alok -1 ",
+        first_name: "Alok -1",
         last_name: "Singh",
         mobile_number: "917838981669"
     }, {
