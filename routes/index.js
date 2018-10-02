@@ -52,20 +52,20 @@ router.get('/sendsms', (reqS, res, next) => {
                 res.json({
                     data: jsonBody,
                     error: null,
-                    status: res.statusCode
+                    status: messageServiceRes.statusCode
                 });
             } else {
                 res.json({
                     data: null,
                     error: jsonBody.message,
-                    status: res.statusCode
+                    status: 500
                 });
             }
-            req.end();
-        });
 
+        });
     });
 
+    req.end();
 });
 
 /**
