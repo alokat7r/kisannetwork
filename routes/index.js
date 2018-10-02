@@ -8,7 +8,7 @@ const KisanNetworkModel = require('../models/message-log');
 router.get('/contactslist', (req, res, next) => {
     let resBody = [{
         id: 1,
-        first_name: "Alok Ranjan",
+        first_name: "Alok -1 ",
         last_name: "Singh",
         mobile_number: "917838981669"
     }, {
@@ -16,6 +16,11 @@ router.get('/contactslist', (req, res, next) => {
         first_name: "Kisan",
         last_name: "Network",
         mobile_number: "919971792703"
+    }, {
+        id: 2,
+        first_name: "Alok -2",
+        last_name: "Singh",
+        mobile_number: "919897433253"
     }];
     res.json({
         data: resBody,
