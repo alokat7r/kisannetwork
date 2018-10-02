@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var mongoDB = 'mongodb://127.0.0.1/fitcraft';
+var mongoDB = 'mongodb://127.0.0.1/kisannetwork';
 mongoose.connect(mongoDB);
 
 mongoose.connection.on('connected', () => {
