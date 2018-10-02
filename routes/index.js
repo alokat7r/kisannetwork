@@ -83,7 +83,7 @@ router.get('/messageslog', (req, res, next) => {
     let page = req.query.page || 1;
     let limit = req.query.limit || 10;
     let skip = (page - 1) * limit;
-    KisanNetworkModel.find({}, null, { skip: skip, limit: limit }).then((result) => {
+    KisanNetworkModel.find({}, null, { skip: skip, limit: limit, sort: { createdAt: -1 } }).then((result) => {
         res.json({
             data: result,
             error: null,
