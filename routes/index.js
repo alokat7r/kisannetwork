@@ -2,9 +2,10 @@ var express = require('express');
 var http = require("http");
 var router = express.Router();
 var generalFunctions = require('../general');
+const KisanNetworkModel = require('../models/message-log');
 
 /* GET home page. */
-router.get('/contactlist', (req, res, next) => {
+router.get('/contactslist', (req, res, next) => {
     let resBody = [{
         id: 1,
         first_name: "Alok Ranjan",
@@ -28,7 +29,9 @@ router.get('/contactlist', (req, res, next) => {
  */
 router.get('/sendsms', (reqS, res, next) => {
     let mobile_number = reqS.query.mobile || null;
-    let message = reqS.query.message != undefined ? `Hi.  Your  OTP  is: ${generalFunctions.getRandomNumber()}, ${reqS.query.message}` : null;
+    let otp = generalFunctions.getRandomNumber();
+    let message = reqS.query.message != undefined ? `Hi.  Your  OTP  is: ${otp}, ${reqS.query.message}` : null;
+    let name = reqS.query.name || null;
     var options = {
         "method": "GET",
         "hostname": "api.msg91.com",
@@ -47,8 +50,13 @@ router.get('/sendsms', (reqS, res, next) => {
         messageServiceRes.on("end", function() {
             var body = Buffer.concat(chunks);
             let jsonBody = JSON.parse(body.toString());
-            console.log("RES-", jsonBody);
             if (jsonBody.type == "success") {
+                let KisanNetworkModelObject = new KisanNetworkModel({
+                    name: name,
+                    mobile: mobile_number,
+                    otp: otp
+                });
+                KisanNetworkModelObject.save();
                 res.json({
                     data: jsonBody,
                     error: null,
@@ -71,8 +79,23 @@ router.get('/sendsms', (reqS, res, next) => {
 /**
  * GET LOG
  */
-router.get('/getlog', (req, res, next) => {
-
+router.get('/messageslog', (req, res, next) => {
+    let page = req.query.page || 1;
+    let limit = req.query.limit || 10;
+    let skip = (page - 1) * limit;
+    KisanNetworkModel.find({}, null, { skip: skip, limit: limit }).then((result) => {
+        res.json({
+            data: result,
+            error: null,
+            status: 200
+        });
+    }).catch((err) => {
+        res.json({
+            data: null,
+            error: err.message,
+            status: 500
+        });
+    });
 });
 
 module.exports = router;
